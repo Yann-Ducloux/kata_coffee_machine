@@ -21,13 +21,13 @@ public class DrinkMakerService {
         StringBuilder stringBuilder = new StringBuilder();
         moneyChecker(drink, price);
         addDrink(drink, stringBuilder);
-        AddOrNotSugarAndCuillere(numberOfSugar, stringBuilder);
+        AddOrNotSugarAndStick(numberOfSugar, stringBuilder);
         return new Command(stringBuilder.toString(), calculRendered(drink, price));
     }
 
     private static Double calculRendered(Drink drink, Double price) {
-        Double rendered = price - drink.getPrice();
-        Double renderedWithTwoDecimal = Math.round(rendered*CENT)/CENT;
+        var rendered = price - drink.getPrice();
+        var renderedWithTwoDecimal = Math.round(rendered*CENT)/CENT;
         return renderedWithTwoDecimal;
     }
 
@@ -42,7 +42,7 @@ public class DrinkMakerService {
         stringBuilder.append(SEPARATOR);
     }
 
-    private static void AddOrNotSugarAndCuillere(Integer numberOfSugar, StringBuilder stringBuilder) {
+    private static void AddOrNotSugarAndStick(Integer numberOfSugar, StringBuilder stringBuilder) {
         boolean haveSugar = numberOfSugar.compareTo(ZERO_SUGAR) == SUPERIOR_OF_ZERO;
         if (haveSugar) {
             addSugar(numberOfSugar, stringBuilder);

@@ -13,7 +13,7 @@ class DrinkMakerServiceTest {
     public static MoneyChecker moneyChecker;
 
     @BeforeAll
-    static void setUpBeforeClass() throws Exception {
+    static void setUpBeforeClass() {
         moneyChecker = new MoneyChecker();
     }
     
@@ -44,9 +44,7 @@ class DrinkMakerServiceTest {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Throwable exception = assertThrows(
                 LackMoneyException.class,
-                () -> {
-                    dms.make(Drink.COFFEE, 2, 0.3);
-                }
+                () -> dms.make(Drink.COFFEE, 2, 0.3)
         );
         assertEquals("Il manque 0,3€", exception.getMessage());
     }
@@ -56,9 +54,7 @@ class DrinkMakerServiceTest {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Throwable exception = assertThrows(
                 LackMoneyException.class,
-                () -> {
-                    dms.make(Drink.TEA, 1, 0.2);
-                }
+                () ->   dms.make(Drink.TEA, 1, 0.2)
         );
         assertEquals("Il manque 0,2€", exception.getMessage());
     }
@@ -68,10 +64,38 @@ class DrinkMakerServiceTest {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Throwable exception = assertThrows(
                 NegativeMoneyException.class,
-                () -> {
-                    dms.make(Drink.CHOCOLATE, 1, -0.2);
-                }
+                () -> dms.make(Drink.CHOCOLATE, 1, -0.2)
         );
         assertEquals("La somme est -0,2€ négative", exception.getMessage());
+    }
+
+    @Test
+    void shouldCommandOrangeJuiceReturnOrangewithoutSugarAndWithoutStick() {
+        DrinkMakerService dms = new DrinkMakerService(moneyChecker);
+        Command command = dms.make(Drink.ORANGE_JUICE, 0, 0.6);
+        assertEquals("O::", command.getDrinkDemand());
+        assertEquals(0.0, command.getRendered());
+    }
+
+    @Test
+    void shouldCommandHotTeaWithTwoSugarReturnTeaTwoSugarOneStick() {
+        DrinkMakerService dms = new DrinkMakerService(moneyChecker);
+        Command command = dms.make(Drink.HOT_TEA, 2, 0.4);
+        assertEquals("Th:2:0", command.getDrinkDemand());
+        assertEquals(0.0, command.getRendered());
+    }
+    @Test
+    void shouldCommandHotChocolateWithOneSugarReturnTeaNotSugarAndOneStick() {
+        DrinkMakerService dms = new DrinkMakerService(moneyChecker);
+        Command command = dms.make(Drink.HOT_CHOCOLATE, 1, 0.5);
+        assertEquals("Hh:1:0", command.getDrinkDemand());
+        assertEquals(0.0, command.getRendered());
+    }
+    @Test
+    void shouldCommandHotCofeeWithTwoSugarReturnTeaTwoSugarStick() {
+        DrinkMakerService dms = new DrinkMakerService(moneyChecker);
+        Command command = dms.make(Drink.HOT_COFFEE, 0, 0.6);
+        assertEquals("Ch::", command.getDrinkDemand());
+        assertEquals(0.0, command.getRendered());
     }
 }
