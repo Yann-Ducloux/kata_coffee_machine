@@ -1,15 +1,23 @@
 package org.example;
 
 public enum Drink {
-    TEA("T", 0.4F),
-    CHOCOLATE("H", 0.5F),
-    COFFEE("C", 0.6F);
+    TEA("T", 0.4),
+    CHOCOLATE("H", 0.5),
+    COFFEE("C", 0.6);
 
-    Drink(String boisson, float price) {
+    Drink(String boisson, Double price) {
         this.boisson = boisson;
         this.price = price;
     }
 
     String boisson;
-    float price;
+    Double price;
+
+    public String getBoisson() {
+        return boisson;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
 }
