@@ -10,6 +10,7 @@ public class DrinkMakerService {
     public static final int ZERO_SUGAR = 0;
     public static final String SEPARATOR = ":";
     public static final double CENT = 100.0;
+    public static final int SUPERIOR_OF_ZERO = 1;
     public MoneyChecker moneyChecker;
 
     public DrinkMakerService(MoneyChecker moneyChecker) {
@@ -42,7 +43,7 @@ public class DrinkMakerService {
     }
 
     private static void AddOrNotSugarAndCuillere(Integer numberOfSugar, StringBuilder stringBuilder) {
-        boolean haveSugar = numberOfSugar.compareTo(ZERO_SUGAR) == 1;
+        boolean haveSugar = numberOfSugar.compareTo(ZERO_SUGAR) == SUPERIOR_OF_ZERO;
         if (haveSugar) {
             addSugar(numberOfSugar, stringBuilder);
         } else {

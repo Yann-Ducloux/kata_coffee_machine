@@ -18,21 +18,21 @@ class DrinkMakerServiceTest {
     }
     
     @Test
-   void shouldCommandTeaWithOneSugarReturnTeaOneSugarOneCuillere() {
+   void shouldCommandTeaWithOneSugarReturnTeaOneSugarOneStick() {
       DrinkMakerService dms = new DrinkMakerService(moneyChecker);
       Command command = dms.make(Drink.TEA, 1, 0.4);
       assertEquals("T:1:0", command.getDrinkDemand());
       assertEquals(0.0, command.getRendered());
   }
     @Test
-    void shouldCommandChocolateWithouSugarReturnTeaNotSugarNotCuillere() {
+    void shouldCommandChocolateWithoutSugarReturnTeaNotSugarNotStick() {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Command command = dms.make(Drink.CHOCOLATE, 0, 1.0);
         assertEquals("H::", command.getDrinkDemand());
         assertEquals(0.5, command.getRendered());
     }
     @Test
-    void shouldCommandCofeeWithTwoSugarReturnTeaTwoSugarCuillere() {
+    void shouldCommandCofeeWithTwoSugarReturnTeaTwoSugarStick() {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Command command = dms.make(Drink.COFFEE, 2, 0.8);
         assertEquals("C:2:0", command.getDrinkDemand());
