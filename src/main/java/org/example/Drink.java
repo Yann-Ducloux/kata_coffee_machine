@@ -20,6 +20,12 @@ public enum Drink {
     public String getBoisson() {
         return boisson;
     }
+    public String getBoissonReport() {
+        if(boisson.length() == 1)
+            return boisson + " ";
+        else
+            return boisson;
+    }
 
     public Double getPrice() {
         return price;

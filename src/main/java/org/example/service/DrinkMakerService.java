@@ -5,25 +5,29 @@ import org.example.entity.Command;
 import org.example.Drink;
 import org.example.exception.LackMoneyException;
 
+import java.util.*;
+
 public class DrinkMakerService {
 
-    public static final int STICK = 0;
-    public static final int ZERO_SUGAR = 0;
-    public static final String SEPARATOR = ":";
-    public static final double CENT = 100.0;
-    public static final int SUPERIOR_OF_ZERO = 1;
+    private static final int STICK = 0;
+    private static final int ZERO_SUGAR = 0;
+    private static final String SEPARATOR = ":";
+    private static final int SUPERIOR_OF_ZERO = 1;
+    public static final String SEPARATOR_REPORT = "     : ";
+    public static final String LEGEND_REPORT = "Drinks : quantity";
+    public static final String TITLE_REPORT = "report:";
     public MoneyChecker moneyChecker;
-    public int commandCoffee = 0;
-    public int commandHotCoffee = 0;
-    public int commandChocolate = 0;
-    public int commandHotChocolate = 0;
-    public int commandOrange = 0;
-    public int commandTea = 0;
-    public int commandHotTea = 0;
-
+    private Map<Drink, Integer> drinks = new HashMap<>();
 
     public DrinkMakerService(MoneyChecker moneyChecker) {
         this.moneyChecker = moneyChecker;
+        drinks.put(Drink.COFFEE, 0);
+        drinks.put(Drink.HOT_COFFEE, 0);
+        drinks.put(Drink.CHOCOLATE, 0);
+        drinks.put(Drink.HOT_CHOCOLATE, 0);
+        drinks.put(Drink.ORANGE_JUICE, 0);
+        drinks.put(Drink.TEA, 0);
+        drinks.put(Drink.HOT_TEA, 0);
     }
 
     public Command make(Drink drink, Integer numberOfSugar, Double price) {
@@ -40,21 +44,8 @@ public class DrinkMakerService {
     }
 
     private void historyDrinkOfDay(Drink drink) {
-        if (drink == Drink.HOT_COFFEE) {
-            commandHotCoffee++;
-        } else if (drink == Drink.COFFEE) {
-            commandCoffee++;
-        } else if (drink == Drink.CHOCOLATE) {
-            commandChocolate++;
-        } else if (drink == Drink.HOT_CHOCOLATE) {
-            commandHotChocolate++;
-        } else if (drink == Drink.ORANGE_JUICE) {
-            commandOrange++;
-        } else if (drink == Drink.TEA) {
-            commandTea++;
-        } else if (drink == Drink.HOT_TEA) {
-            commandHotTea++;
-        }
+        int increaseCounterOfDrink = drinks.get(drink) + 1;
+        drinks.put(drink, increaseCounterOfDrink);
     }
 
     private static void moneyChecker(Drink drink, Double price) {
@@ -83,15 +74,19 @@ public class DrinkMakerService {
     }
 
     public String report() {
-        String report = "report:" + System.lineSeparator() +
-                "Drinks : quantity"+ System.lineSeparator() +
-                "C      : " + commandCoffee + System.lineSeparator() +
-                "Ch     : " + commandHotCoffee + System.lineSeparator() +
-                "H      : " + commandChocolate + System.lineSeparator() +
-                "Hh     : " + commandHotChocolate + System.lineSeparator() +
-                "O      : " + commandOrange + System.lineSeparator() +
-                "T      : " + commandTea + System.lineSeparator() +
-                "Th     : " + commandHotTea;
-        return report;
+        StringBuilder report = new StringBuilder(TITLE_REPORT + System.lineSeparator() +
+                LEGEND_REPORT + System.lineSeparator());
+        List<Drink> drinkss = new ArrayList<>();
+        for (Drink drinksss : Drink.values()) {
+            drinkss.add(drinksss);
+        }
+        drinkss.sort(Comparator.comparing(drink -> drink.getBoisson()));
+        drinkss.forEach(drink -> {
+                    report.append(drink.getBoissonReport());
+                    report.append(SEPARATOR_REPORT);
+                    report.append(drinks.get(drink));
+                    report.append(System.lineSeparator());
+                });
+        return report.toString();
     }
 }

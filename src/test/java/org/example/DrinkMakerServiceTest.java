@@ -92,7 +92,7 @@ class DrinkMakerServiceTest {
                 "Hh     : 0" + System.lineSeparator() +
                 "O      : 2" + System.lineSeparator() +
                 "T      : 2" + System.lineSeparator() +
-                "Th     : 1";
+                "Th     : 1" + System.lineSeparator();
         assertEquals(reportExpected, dms.report());
     }
 
@@ -125,7 +125,7 @@ class DrinkMakerServiceTest {
                 "Hh     : 0" + System.lineSeparator() +
                 "O      : 6" + System.lineSeparator() +
                 "T      : 1" + System.lineSeparator() +
-                "Th     : 4";
+                "Th     : 4" + System.lineSeparator();
         assertEquals(reportExpected, dms.report());
     }
 }
