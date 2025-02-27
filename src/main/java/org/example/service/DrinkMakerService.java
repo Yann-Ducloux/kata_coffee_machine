@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.checker.MoneyChecker;
 import org.example.entity.Command;
 import org.example.Drink;
+import org.example.exception.LackMoneyException;
 
 public class DrinkMakerService {
 
@@ -12,6 +13,14 @@ public class DrinkMakerService {
     public static final double CENT = 100.0;
     public static final int SUPERIOR_OF_ZERO = 1;
     public MoneyChecker moneyChecker;
+    public int commandCoffee = 0;
+    public int commandHotCoffee = 0;
+    public int commandChocolate = 0;
+    public int commandHotChocolate = 0;
+    public int commandOrange = 0;
+    public int commandTea = 0;
+    public int commandHotTea = 0;
+
 
     public DrinkMakerService(MoneyChecker moneyChecker) {
         this.moneyChecker = moneyChecker;
@@ -19,20 +28,36 @@ public class DrinkMakerService {
 
     public Command make(Drink drink, Integer numberOfSugar, Double price) {
         StringBuilder stringBuilder = new StringBuilder();
-        moneyChecker(drink, price);
-        addDrink(drink, stringBuilder);
-        AddOrNotSugarAndStick(numberOfSugar, stringBuilder);
-        return new Command(stringBuilder.toString(), calculRendered(drink, price));
+        try {
+            moneyChecker(drink, price);
+            addDrink(drink, stringBuilder);
+            AddOrNotSugarAndStick(numberOfSugar, stringBuilder);
+            historyDrinkOfDay(drink);
+        } catch (LackMoneyException e) {
+            stringBuilder.append("M: ").append(e.getMessage());
+        }
+        return new Command(stringBuilder.toString());
     }
 
-    private static Double calculRendered(Drink drink, Double price) {
-        var rendered = price - drink.getPrice();
-        var renderedWithTwoDecimal = Math.round(rendered*CENT)/CENT;
-        return renderedWithTwoDecimal;
+    private void historyDrinkOfDay(Drink drink) {
+        if (drink == Drink.HOT_COFFEE) {
+            commandHotCoffee++;
+        } else if (drink == Drink.COFFEE) {
+            commandCoffee++;
+        } else if (drink == Drink.CHOCOLATE) {
+            commandChocolate++;
+        } else if (drink == Drink.HOT_CHOCOLATE) {
+            commandHotChocolate++;
+        } else if (drink == Drink.ORANGE_JUICE) {
+            commandOrange++;
+        } else if (drink == Drink.TEA) {
+            commandTea++;
+        } else if (drink == Drink.HOT_TEA) {
+            commandHotTea++;
+        }
     }
 
     private static void moneyChecker(Drink drink, Double price) {
-        MoneyChecker.NegativeMoneyChecker(price);
         MoneyChecker.LackMoneyChecker(drink, price);
     }
 
@@ -55,5 +80,18 @@ public class DrinkMakerService {
         stringBuilder.append(numberOfSugar);
         stringBuilder.append(SEPARATOR);
         stringBuilder.append(STICK);
+    }
+
+    public String report() {
+        String report = "report:" + System.lineSeparator() +
+                "Drinks : quantity"+ System.lineSeparator() +
+                "C      : " + commandCoffee + System.lineSeparator() +
+                "Ch     : " + commandHotCoffee + System.lineSeparator() +
+                "H      : " + commandChocolate + System.lineSeparator() +
+                "Hh     : " + commandHotChocolate + System.lineSeparator() +
+                "O      : " + commandOrange + System.lineSeparator() +
+                "T      : " + commandTea + System.lineSeparator() +
+                "Th     : " + commandHotTea;
+        return report;
     }
 }

@@ -2,8 +2,6 @@ package org.example;
 
 import org.example.checker.MoneyChecker;
 import org.example.entity.Command;
-import org.example.exception.LackMoneyException;
-import org.example.exception.NegativeMoneyException;
 import org.example.service.DrinkMakerService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,51 +20,32 @@ class DrinkMakerServiceTest {
       DrinkMakerService dms = new DrinkMakerService(moneyChecker);
       Command command = dms.make(Drink.TEA, 1, 0.4);
       assertEquals("T:1:0", command.getDrinkDemand());
-      assertEquals(0.0, command.getRendered());
   }
     @Test
     void shouldCommandChocolateWithoutSugarReturnTeaNotSugarNotStick() {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Command command = dms.make(Drink.CHOCOLATE, 0, 1.0);
         assertEquals("H::", command.getDrinkDemand());
-        assertEquals(0.5, command.getRendered());
     }
     @Test
     void shouldCommandCofeeWithTwoSugarReturnTeaTwoSugarStick() {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Command command = dms.make(Drink.COFFEE, 2, 0.8);
         assertEquals("C:2:0", command.getDrinkDemand());
-        assertEquals(0.2, command.getRendered());
     }
 
     @Test
     void shouldCommandCoffeeWithLackMoneyReturnErrorLackMoney() {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
-        Throwable exception = assertThrows(
-                LackMoneyException.class,
-                () -> dms.make(Drink.COFFEE, 2, 0.3)
-        );
-        assertEquals("Il manque 0,3€", exception.getMessage());
+        Command command = dms.make(Drink.COFFEE, 2, 0.3);
+        assertEquals("M: Il manque 0,3€", command.getDrinkDemand());
     }
 
     @Test
     void shouldCommandTeaWithLackMoneyReturnErrorLackMoney() {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
-        Throwable exception = assertThrows(
-                LackMoneyException.class,
-                () ->   dms.make(Drink.TEA, 1, 0.2)
-        );
-        assertEquals("Il manque 0,2€", exception.getMessage());
-    }
-
-    @Test
-    void shouldCommandTeaWithMoneyNegativeReturnErrorMoneyNegative() {
-        DrinkMakerService dms = new DrinkMakerService(moneyChecker);
-        Throwable exception = assertThrows(
-                NegativeMoneyException.class,
-                () -> dms.make(Drink.CHOCOLATE, 1, -0.2)
-        );
-        assertEquals("La somme est -0,2€ négative", exception.getMessage());
+        Command command = dms.make(Drink.TEA, 1, 0.2);
+        assertEquals("M: Il manque 0,2€", command.getDrinkDemand());
     }
 
     @Test
@@ -74,7 +53,6 @@ class DrinkMakerServiceTest {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Command command = dms.make(Drink.ORANGE_JUICE, 0, 0.6);
         assertEquals("O::", command.getDrinkDemand());
-        assertEquals(0.0, command.getRendered());
     }
 
     @Test
@@ -82,20 +60,72 @@ class DrinkMakerServiceTest {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Command command = dms.make(Drink.HOT_TEA, 2, 0.4);
         assertEquals("Th:2:0", command.getDrinkDemand());
-        assertEquals(0.0, command.getRendered());
     }
     @Test
     void shouldCommandHotChocolateWithOneSugarReturnTeaNotSugarAndOneStick() {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Command command = dms.make(Drink.HOT_CHOCOLATE, 1, 0.5);
         assertEquals("Hh:1:0", command.getDrinkDemand());
-        assertEquals(0.0, command.getRendered());
     }
     @Test
     void shouldCommandHotCofeeWithTwoSugarReturnTeaTwoSugarStick() {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker);
         Command command = dms.make(Drink.HOT_COFFEE, 0, 0.6);
         assertEquals("Ch::", command.getDrinkDemand());
-        assertEquals(0.0, command.getRendered());
+    }
+    @Test
+    void shouldPrintReportOfDay() {
+        DrinkMakerService dms = new DrinkMakerService(moneyChecker);
+        dms.make(Drink.HOT_COFFEE, 0, 0.6);
+        dms.make(Drink.COFFEE, 0, 0.6);
+        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
+        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
+        dms.make(Drink.CHOCOLATE, 0, 0.6);
+        dms.make(Drink.TEA, 0, 0.6);
+        dms.make(Drink.TEA, 0, 0.6);
+        dms.make(Drink.HOT_TEA, 0, 0.6);
+        String reportExpected = "report:" + System.lineSeparator() +
+                "Drinks : quantity" + System.lineSeparator() +
+                "C      : 1" + System.lineSeparator() +
+                "Ch     : 1" + System.lineSeparator() +
+                "H      : 1" + System.lineSeparator() +
+                "Hh     : 0" + System.lineSeparator() +
+                "O      : 2" + System.lineSeparator() +
+                "T      : 2" + System.lineSeparator() +
+                "Th     : 1";
+        assertEquals(reportExpected, dms.report());
+    }
+
+    @Test
+    void shouldPrintReportOfDayWithLackMoney() {
+        DrinkMakerService dms = new DrinkMakerService(moneyChecker);
+        dms.make(Drink.HOT_COFFEE, 0, 0.6);
+        dms.make(Drink.COFFEE, 0, 0.6);
+        dms.make(Drink.HOT_TEA, 0, 0.6);
+        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
+        dms.make(Drink.CHOCOLATE, 0, 0.6);
+        dms.make(Drink.HOT_TEA, 0, 0.6);
+        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
+        dms.make(Drink.TEA, 0, 0.6);
+        dms.make(Drink.TEA, 0, 0.2);
+        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
+        dms.make(Drink.HOT_COFFEE, 0, 0.6);
+        dms.make(Drink.HOT_TEA, 0, 0.6);
+        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
+        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
+        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
+        dms.make(Drink.HOT_TEA, 0, 0.6);
+        dms.make(Drink.HOT_COFFEE, 0, 0.6);
+
+        String reportExpected = "report:" + System.lineSeparator() +
+                "Drinks : quantity" + System.lineSeparator() +
+                "C      : 1" + System.lineSeparator() +
+                "Ch     : 3" + System.lineSeparator() +
+                "H      : 1" + System.lineSeparator() +
+                "Hh     : 0" + System.lineSeparator() +
+                "O      : 6" + System.lineSeparator() +
+                "T      : 1" + System.lineSeparator() +
+                "Th     : 4";
+        assertEquals(reportExpected, dms.report());
     }
 }
