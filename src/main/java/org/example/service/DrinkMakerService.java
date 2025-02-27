@@ -25,7 +25,7 @@ public class DrinkMakerService {
         try {
             moneyChecker(drink, price);
             addDrink(drink, stringBuilder);
-            AddOrNotSugarAndStick(numberOfSugar, stringBuilder);
+            addOrNotSugarAndStick(numberOfSugar, stringBuilder);
             this.report.addDrinkCommand(drink);
         } catch (LackMoneyException e) {
             stringBuilder.append("M: ").append(e.getMessage());
@@ -44,7 +44,7 @@ public class DrinkMakerService {
         stringBuilder.append(SEPARATOR);
     }
 
-    private static void AddOrNotSugarAndStick(Integer numberOfSugar, StringBuilder stringBuilder) {
+    private static void addOrNotSugarAndStick(Integer numberOfSugar, StringBuilder stringBuilder) {
         boolean haveSugar = numberOfSugar.compareTo(ZERO_SUGAR) == SUPERIOR_OF_ZERO;
         if (haveSugar) {
             addSugar(numberOfSugar, stringBuilder);
