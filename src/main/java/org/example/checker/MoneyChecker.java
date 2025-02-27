@@ -1,6 +1,6 @@
 package org.example.checker;
 
-import org.example.Drink;
+import org.example.entity.Drink;
 import org.example.exception.LackMoneyException;
 
 public class MoneyChecker {

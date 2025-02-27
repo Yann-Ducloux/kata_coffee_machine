@@ -1,4 +1,8 @@
-package org.example;
+package org.example.entity;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public enum Drink {
     TEA("T", 0.4),
@@ -23,11 +27,20 @@ public enum Drink {
     public String getBoissonReport() {
         if(boisson.length() == 1)
             return boisson + " ";
-        else
-            return boisson;
+        return boisson;
     }
 
     public Double getPrice() {
         return price;
     }
+
+    public static List<Drink> getDrinksByOrderAlphabetic() {
+        List<Drink> drinks = new ArrayList<>();
+        for (Drink drink : Drink.values()) {
+            drinks.add(drink);
+        }
+        drinks.sort(Comparator.comparing(Drink::getBoisson));
+        return drinks;
+    }
+
 }
