@@ -1,6 +1,7 @@
 package org.example.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -36,9 +37,7 @@ public enum Drink {
 
     public static List<Drink> getDrinksByOrderAlphabetic() {
         List<Drink> drinks = new ArrayList<>();
-        for (Drink drink : Drink.values()) {
-            drinks.add(drink);
-        }
+        Collections.addAll(drinks, Drink.values());
         drinks.sort(Comparator.comparing(Drink::getBoisson));
         return drinks;
     }

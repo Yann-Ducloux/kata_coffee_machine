@@ -31,7 +31,7 @@ class DrinkMakerServiceTest {
         assertEquals("H::", command.getDrinkDemand());
     }
     @Test
-    void shouldCommandCofeeWithTwoSugarReturnTeaTwoSugarStick() {
+    void shouldCommandCoffeeWithTwoSugarReturnTeaTwoSugarStick() {
         Report reportOfDay = new Report();
         DrinkMakerService dms = new DrinkMakerService(moneyChecker, reportOfDay);
         Command command = dms.make(Drink.COFFEE, 2, 0.8);
@@ -55,7 +55,7 @@ class DrinkMakerServiceTest {
     }
 
     @Test
-    void shouldCommandOrangeJuiceReturnOrangewithoutSugarAndWithoutStick() {
+    void shouldCommandOrangeJuiceReturnOrangeWithoutSugarAndWithoutStick() {
         Report reportOfDay = new Report();
         DrinkMakerService dms = new DrinkMakerService(moneyChecker, reportOfDay);
         Command command = dms.make(Drink.ORANGE_JUICE, 0, 0.6);
@@ -77,7 +77,7 @@ class DrinkMakerServiceTest {
         assertEquals("Hh:1:0", command.getDrinkDemand());
     }
     @Test
-    void shouldCommandHotCofeeWithTwoSugarReturnTeaTwoSugarStick() {
+    void shouldCommandHotCoffeeWithTwoSugarReturnTeaTwoSugarStick() {
         Report reportOfDay = new Report();
         DrinkMakerService dms = new DrinkMakerService(moneyChecker, reportOfDay);
         Command command = dms.make(Drink.HOT_COFFEE, 0, 0.6);
@@ -118,7 +118,7 @@ class DrinkMakerServiceTest {
         dms.make(Drink.HOT_TEA, 0, 0.6);
         dms.make(Drink.ORANGE_JUICE, 0, 0.6);
         dms.make(Drink.TEA, 0, 0.6);
-        dms.make(Drink.TEA, 0, 0.2);
+        Command commandLack = dms.make(Drink.TEA, 0, 0.2);
         dms.make(Drink.ORANGE_JUICE, 0, 0.6);
         dms.make(Drink.HOT_COFFEE, 0, 0.6);
         dms.make(Drink.HOT_TEA, 0, 0.6);
@@ -138,5 +138,6 @@ class DrinkMakerServiceTest {
                 "T      : 1" + System.lineSeparator() +
                 "Th     : 4" + System.lineSeparator();
         assertEquals(reportExpected, dms.reportPrint());
+        assertEquals("M: Il manque 0,2€", commandLack.getDrinkDemand());
     }
 }

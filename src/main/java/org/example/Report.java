@@ -2,17 +2,17 @@ package org.example;
 
 import org.example.entity.Drink;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class Report {
-    private Map<Drink, Integer> drinks;
+    private final Map<Drink, Integer> drinks;
     public static final String SEPARATOR_REPORT = "     : ";
     public static final String LEGEND_REPORT = "Drinks : quantity";
     public static final String TITLE_REPORT = "report:";
 
     public Report() {
-        drinks = new HashMap<>();
+        drinks = new EnumMap<>(Drink.class);
         drinks.put(Drink.COFFEE, 0);
         drinks.put(Drink.HOT_COFFEE, 0);
         drinks.put(Drink.CHOCOLATE, 0);
@@ -26,7 +26,6 @@ public class Report {
         int increaseCounterOfDrink = drinks.get(drink) + 1;
         drinks.put(drink, increaseCounterOfDrink);
     }
-
 
     public String print() {
         StringBuilder report = new StringBuilder(TITLE_REPORT + System.lineSeparator() +

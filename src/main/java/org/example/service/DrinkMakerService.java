@@ -12,8 +12,8 @@ public class DrinkMakerService {
     private static final int ZERO_SUGAR = 0;
     private static final String SEPARATOR = ":";
     private static final int SUPERIOR_OF_ZERO = 1;
-    public MoneyChecker moneyChecker;
-    private Report report;
+    private final MoneyChecker moneyChecker;
+    private final Report report;
 
     public DrinkMakerService(MoneyChecker moneyChecker, Report report) {
         this.moneyChecker = moneyChecker;
@@ -23,7 +23,7 @@ public class DrinkMakerService {
     public Command make(Drink drink, Integer numberOfSugar, Double price) {
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            moneyChecker(drink, price);
+            MoneyChecker.LackMoneyChecker(drink, price);
             addDrink(drink, stringBuilder);
             addOrNotSugarAndStick(numberOfSugar, stringBuilder);
             this.report.addDrinkCommand(drink);
@@ -32,12 +32,6 @@ public class DrinkMakerService {
         }
         return new Command(stringBuilder.toString());
     }
-
-
-    private static void moneyChecker(Drink drink, Double price) {
-        MoneyChecker.LackMoneyChecker(drink, price);
-    }
-
 
     private static void addDrink(Drink drink, StringBuilder stringBuilder) {
         stringBuilder.append(drink.getBoisson());
