@@ -12,6 +12,7 @@ public class DrinkMakerService {
     private static final int ZERO_SUGAR = 0;
     private static final String SEPARATOR = ":";
     private static final int SUPERIOR_OF_ZERO = 1;
+    public static final String CODE_MESSAGE = "M: ";
     private final MoneyChecker moneyChecker;
     private final Report report;
 
@@ -28,7 +29,7 @@ public class DrinkMakerService {
             addOrNotSugarAndStick(numberOfSugar, stringBuilder);
             this.report.addDrinkCommand(drink);
         } catch (LackMoneyException e) {
-            stringBuilder.append("M: ").append(e.getMessage());
+            stringBuilder.append(CODE_MESSAGE).append(e.getMessage());
         }
         return new Command(stringBuilder.toString());
     }

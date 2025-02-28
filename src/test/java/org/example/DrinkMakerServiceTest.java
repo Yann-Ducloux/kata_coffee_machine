@@ -90,10 +90,10 @@ class DrinkMakerServiceTest {
         dms.make(Drink.COFFEE, 0, 0.6);
         dms.make(Drink.ORANGE_JUICE, 0, 0.6);
         dms.make(Drink.ORANGE_JUICE, 0, 0.6);
-        dms.make(Drink.CHOCOLATE, 0, 0.6);
-        dms.make(Drink.TEA, 0, 0.6);
-        dms.make(Drink.TEA, 0, 0.6);
-        dms.make(Drink.HOT_TEA, 0, 0.6);
+        dms.make(Drink.CHOCOLATE, 0, 0.5);
+        dms.make(Drink.TEA, 0, 0.4);
+        dms.make(Drink.TEA, 0, 0.4);
+        dms.make(Drink.HOT_TEA, 0, 0.4);
         String reportExpected = "report:" + System.lineSeparator() +
                 "Drinks : quantity" + System.lineSeparator() +
                 "C      : 1" + System.lineSeparator() +
@@ -102,7 +102,8 @@ class DrinkMakerServiceTest {
                 "Hh     : 0" + System.lineSeparator() +
                 "O      : 2" + System.lineSeparator() +
                 "T      : 2" + System.lineSeparator() +
-                "Th     : 1" + System.lineSeparator();
+                "Th     : 1" + System.lineSeparator() +
+                "Total amount: 4,1€";
         assertEquals(reportExpected, dms.reportPrint());
     }
 
@@ -112,31 +113,25 @@ class DrinkMakerServiceTest {
         DrinkMakerService dms = new DrinkMakerService(moneyChecker, reportOfDay);
         dms.make(Drink.HOT_COFFEE, 0, 0.6);
         dms.make(Drink.COFFEE, 0, 0.6);
-        dms.make(Drink.HOT_TEA, 0, 0.6);
+        dms.make(Drink.HOT_TEA, 0, 0.4);
         dms.make(Drink.ORANGE_JUICE, 0, 0.6);
-        dms.make(Drink.CHOCOLATE, 0, 0.6);
-        dms.make(Drink.HOT_TEA, 0, 0.6);
+        dms.make(Drink.CHOCOLATE, 0, 0.5);
+        dms.make(Drink.HOT_TEA, 0, 0.4);
         dms.make(Drink.ORANGE_JUICE, 0, 0.6);
-        dms.make(Drink.TEA, 0, 0.6);
+        dms.make(Drink.TEA, 0, 0.4);
         Command commandLack = dms.make(Drink.TEA, 0, 0.2);
-        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
-        dms.make(Drink.HOT_COFFEE, 0, 0.6);
-        dms.make(Drink.HOT_TEA, 0, 0.6);
-        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
-        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
-        dms.make(Drink.ORANGE_JUICE, 0, 0.6);
-        dms.make(Drink.HOT_TEA, 0, 0.6);
         dms.make(Drink.HOT_COFFEE, 0, 0.6);
 
         String reportExpected = "report:" + System.lineSeparator() +
                 "Drinks : quantity" + System.lineSeparator() +
                 "C      : 1" + System.lineSeparator() +
-                "Ch     : 3" + System.lineSeparator() +
+                "Ch     : 2" + System.lineSeparator() +
                 "H      : 1" + System.lineSeparator() +
                 "Hh     : 0" + System.lineSeparator() +
-                "O      : 6" + System.lineSeparator() +
+                "O      : 2" + System.lineSeparator() +
                 "T      : 1" + System.lineSeparator() +
-                "Th     : 4" + System.lineSeparator();
+                "Th     : 2" + System.lineSeparator() +
+                "Total amount: 4,7€";
         assertEquals(reportExpected, dms.reportPrint());
         assertEquals("M: Il manque 0,2€", commandLack.getDrinkDemand());
     }
