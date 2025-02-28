@@ -1,6 +1,7 @@
 # Explication du code du kata coffee machine
 ## Enum
 - il y a un nombre limité de boissons.
+- cela a été facile d'ajouter le prix de la boisson.
 - facilement ajouter une nouvelle boisson.
 
 ## EnumMap
